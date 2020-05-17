@@ -1,0 +1,6 @@
+{
+    "require": {
+        "bephp/activerecord": "^2.2",
+        "slim/slim": "3.*"
+    }
+}

@@ -1,0 +1,36 @@
+Battleship : 
+
+grille
+	A	B	C	D	E
+1	x	0	0	0	0
+2	x	0	x	0	0
+3	x	0	x	0	0
+4	0	0	x	0	0
+5	0	0	x	0	0
+6	x	x	0	x	x
+7	0	0	0	0	0
+8	0	0	0	0	0
+9	0	0	0	0	0
+10	x	x	x	x	0
+IDGame
+IDj1
+IDj2
+
+
+
+
+soit aller directement au lien donné par partenaire
+soit utiliser page d'accueil avec ID de la partie pour aller à la page de cette dernière
+
+
+
+PLAN D'ACTION
+./ faire l'index
+./ faire la database et son lien sur l'index
+faire l'interface de base de la partie (1 page/joueur)
+faire le jeu
+faire la fin de partie
+faire
+
+aee0156260
+a5db4dfd49
