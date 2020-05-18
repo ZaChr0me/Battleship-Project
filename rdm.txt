@@ -30,7 +30,7 @@ PLAN D'ACTION
 faire l'interface de base de la partie (1 page/joueur)
 faire le jeu
 faire la fin de partie
-faire
+faire une plus joli interface
 
 aee0156260
 a5db4dfd49

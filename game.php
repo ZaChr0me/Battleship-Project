@@ -6,24 +6,30 @@ class GameStorage extends ActiveRecord{
     public $table = 'GameStorage';
   public $primaryKey = 'ID';
 }
-$GameStorageQuery=new GameStorage();
+
 $app = new \Slim\App();
 $app->get(
     '/{id}',
     function($request, $response, array $args){
-        //$PlayerID=bin2hex($args['id']);
-        //echo $PlayerID;
-        echo "</br>";
-        $PlayerID=GameStorage::find_by_player1($args['id']);
-        echo $PlayerID->ID;
-        echo $PlayerID->player1;
-        echo $PlayerID->player2;
-        //header('Location: http://stackoverflow.com');
+        $PlayerID=$args['id'];
+
+        $GameStorageQuery=new GameStorage();
+        $Game=$GameStorageQuery->findAll();
+        //since $GameStorageQuery->where('Playera=$PlayerID')->find() nor ->find_by_PlayerA() never worked, the brute method of iterating through the entire game list...
+        //it isn't optimal, but works...
+
+        for($i=0; $i<sizeof($Game); $i++){
+            echo "searching</br>";
+            if($Game[$i]->data['PlayerA']==$PlayerID){
+                echo "Found it! " . $Game[$i]->data['ID'];
+            break;
+            }
+            if($Game[$i]->data['PlayerB']==$PlayerID){
+                echo "Found it! ".$Game[$i]->data['ID'];
+            break;
+            }
+        }
     }
 );
 $app->run();
-//if (isset($_POST['join'])||)
-
-
-
 ?>

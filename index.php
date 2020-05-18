@@ -31,49 +31,16 @@
             //check if there was an error with the ID during the redirection
             session_start();
             if(isset($_SESSION['idError'])){
-                echo "The ID you may have entered is incorrect.";
-                echo "</br>";
+                $Error=$_SESSION['idError'];
+                echo $Error."</br>";
                 unset($_SESSION['idError']);
             }
-            session_destroy()
+            session_destroy();
         ?>
         <input type="text" name="join" placeholder="Enter your Game ID"></br>
         <button type="submit" name="joinGame" value="Submit" class="button-primary align-center">Join the Game</button></br>
         
     </form>
-
-<?php
-require __DIR__ . '/vendor/autoload.php';
-
-class GameStorage extends ActiveRecord{
-    public $table = 'friend';
-  public $primaryKey = 'id';
-}
-
-/*ActiveRecord::setDb(new PDO('sqlite:friends.db'));
-$friendQuery = new Game();
-print_r($allFriends);
-*/
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-echo "test1</br>".bin2hex(random_bytes(5))."</br>";
-echo "test2</br>".bin2hex(random_bytes(5));
-/*$app->get(
-    '/{id}',
-    function (Request $request, Response $response, array $args) use ($db) {
-        $sql = "select * from participant";
-        $ret = $db->query($sql);
-        $friends = [];
-        while ($friend = $ret->fetchArray(SQLITE3_ASSOC)) {
-            $friends[] = $friend;
-        }
-        return $response->withJson($friends);
-    }
-);
-*/
-
-?>
 </div>
 </body>
 </html>
