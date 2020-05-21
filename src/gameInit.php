@@ -79,6 +79,7 @@
     $Player1Template=json_encode($templates['Templates'][random_int(1,count($templates["Templates"])-1)]['tiles']);
     echo $Player1Template;
     $Player2Template=json_encode($templates['Templates'][random_int(1,count($templates["Templates"])-1)]['tiles']);
+    //empty view for the players to stare at while they prepare their first moves
     $Player1View=json_encode(array([0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]));
     $Player2View=json_encode(array([0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]));
     echo "INSERT INTO Game_$GameID VALUES(0,$Player1Template,$Player2Template,\"\");";

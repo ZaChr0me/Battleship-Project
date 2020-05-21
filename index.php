@@ -12,17 +12,22 @@
 <main class="bordered center">
     <article class="horizontal-space">
     <h5 class="align-center">Welcome to the sea, admiral!</h5>
+    <p class="align-center">
         We're glad you've come. We've been stuck in a rut against our opponents, as with every shot of our cannons and every torpedoes launched, they responded in kind.
         Thus, our force are evenly matched, with a carrier, a battleship, a cruiser, a submarine and a destroyer remaining.
+    </p>
     </br>
     </br>
+    <p class="align-center">
         You'll be given full control of the fleet...but the shallow waters and the reefs we're currently hovering over are too dangerous to both maneuver and fire.
         We'll thus be only firing at their positions. Even worse,  a thick fog has risen and covered the whole battlefield, so we can't get any clear idea of their positions.
+    </p>
     </br>
     </br>
-        <h5 class="align-center">May the winds fly in your favour<h5>
+        
     </article>
     <div>
+    <h5 class="align-center">May the winds fly in your favour</h5>
     <form class="align-center" method="POST" action="./src/gameInit.php">
         <label>Create a new game and enter as player 1.</label>
         </br>

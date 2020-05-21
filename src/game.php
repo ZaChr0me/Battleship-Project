@@ -1,4 +1,9 @@
 <?php
+
+/*
+    GAMELOGIC FILE + COMMUNICATION WITH THE DATABASE
+*/
+
 require '../vendor/autoload.php';
 use Slim\Views\Twig;
 use \Slim\Views\TwigExtension;
@@ -36,7 +41,7 @@ $container['view'] = function ($container) {
     return $view;
 };
 
-//First Entry
+//obtain the games base informations (game ID, what player type (A or B) is currently playing)
 $app->get(
     '/init/{playerid}',
     function($request, $response, array $args){
@@ -79,6 +84,7 @@ $app->get(
     }
 );
 
+//obtain the precise state of a board
 $app->get('/board/{gameID}/{playerType}/{level}/{board}',
     function($request, $response, array $args){
         $GameState=new GameState();
@@ -98,16 +104,113 @@ $app->get('/board/{gameID}/{playerType}/{level}/{board}',
                 return json_encode($Game->data['playerBBoard']);
             }
             else{
-                return json_encode($Game->data['playerAView']);
+                return json_encode($Game->data['playerBView']);
             }
         }
     });
 
-$app->get('/play/{playerType}/{gameID}',function(ServerRequestInterface $request, ResponseInterface  $response, array $args){
-    
-    return $args['playerType'];
+//registering a move in the database, and changing turns
+$app->post('/play/{playerType}/{gameID}/{move}',function(ServerRequestInterface $request, ResponseInterface  $response, array $args){
+    //to cast a letter as an integer for the purpose of modifying the boards
+    $convertion=array('a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5,'f'=>6,'g'=>7,'h'=>7,'A'=>1,'B'=>2,'C'=>3,'D'=>4,'E'=>5,'F'=>6,'G'=>7,'H'=>7);
+    $GameState=new GameState();
+    $GameState->setTable($args['gameID']);
+    if(!$GameState->find(2)){
+        //creation of the row dedicated to the game
+        $Game=$GameState->find(1);
+        //update of the boards, since it is always player A that begins to play, we are assured of the fact he will be the one to make a move first
+        $newview=$Game->data['playerAView'];
+        $newview[$args['move'][1]][$convertion[$args['move'][0]]]=2;
+        $newboard=$Game->data['playerBBoard'];
+        $newboard[$args['move'][1]][$convertion[$args['move'][0]]]=2;
+        $GameID=$args['gameID'];
+        ActiveRecord::execute("INSERT INTO Game_$GameID VALUES(1,\"$Game->data['playerABoard']\",\"$newboard\",\"$newview\",\"$Game->data['playerBView']\",2);");
+    }
+    else{
+        $GameState->find(2);
+        if($args['playerType']=='a'){
+            $newview=$Game->data['playerAView'];
+            $newview[$args['move'][1]][$convertion[$args['move'][0]]]=2;
+            $newboard=$Game->data['playerBBoard'];
+            $newboard[$args['move'][1]][$convertion[$args['move'][0]]]=2;
+
+            $GameState->playerTurn=2;
+            $GameState->PlayerBBoard=$newboard;
+            $GameState->PlayerAView=$newview;
+            $GameState->update();
+        }
+        else{
+            $newview=$Game->data['playerBView'];
+            $newview[$args['move'][1]][$convertion[$args['move'][0]]]=2;
+            $newboard=$Game->data['playerABoard'];
+            $newboard[$args['move'][1]][$convertion[$args['move'][0]]]=2;
+
+            $GameState->playerTurn=1;
+            $GameState->PlayerABoard=$newboard;
+            $GameState->PlayerBView=$newview;
+            $GameState->update();
+        }
+    }
+
+    return "clear";
 });
 
+//check whose turn it is or if the game has ended
+$app->get('/update/{gameID}',function($request, $response, array $args){
+    $GameState=new GameState();
+    $GameState->setTable($args['gameID']);
+    $Game=$GameState->find(2);
+    $turn='';
+
+    if($Game->data['playerTurn']=='1'){
+        $turn= 'A';
+    }
+    else if($Game->data['playerTurn']=='2'){
+        $turn= 'B';
+    }
+    else if($Game->data['playerTurn']=='3'){
+        return 'The Victor of this battle is player A!';
+    }
+    else if($Game->data['playerTurn']=='4'){
+        return 'The Victor of this battle is player B!';
+    }
+
+    //Checking if there is a victor
+    $board= json_decode($Game->data['playerABoard']);
+    $gameStatus=false;
+    for ($i=0; $i < 8; $i++) { 
+        for ($j=0; $j < 8; $j++) { 
+            if($board[$i][$j]==1){
+                $gameStatus=true;
+            break;
+            }
+        }
+    }
+    if($gameStatus==false){
+        $turn= 'The Victor of this battle is player B!';
+        $GameState->playerTurn=4;
+        $GameState->update();
+    }
+    $board= json_decode($Game->data['playerBBoard']);
+    $gameStatus=false;
+    for ($i=0; $i < 8; $i++) { 
+        for ($j=0; $j < 8; $j++) { 
+            if($board[$i][$j]==1){
+                $gameStatus=true;
+            break;
+            }
+        }
+    }
+    if($gameStatus==false){
+        $turn= 'The Victor of this battle is player A!';
+        $GameState->playerTurn=3;
+        $GameState->update();
+    }
+
+
+
+    return $turn;
+});
 
 $app->run();
 ?>

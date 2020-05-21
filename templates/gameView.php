@@ -10,8 +10,8 @@
     </header>
     <main>
     <form class="align-center">
-             <label>Enter your move</label>
-             <input id="test1" type="text" value="test">
+             <label id="label">Enter your move</label>
+             <input id="move" type="text" value="test">
              <button id="play">send move</button>
 
         </form>
@@ -37,6 +37,7 @@
     <footer></footer>
     <input type="hidden" id="playerType">
     <input type="hidden" id="gameID">
+    <input type="hidden" id="turn">
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="../../src/game.js" type="text/javascript"></script>
 </body>
