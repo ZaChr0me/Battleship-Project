@@ -1,6 +1,9 @@
 {
     "require": {
         "bephp/activerecord": "^2.2",
-        "slim/slim": "3.*"
+        "slim/slim": "3.*",
+        "components/jquery": "^3.5",
+        "slim/twig-view": "2.*",
+        "ext-sqlite3": "*"
     }
 }

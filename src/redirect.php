@@ -1,7 +1,7 @@
 
 <?php
-require __DIR__ . '/vendor/autoload.php';
-ActiveRecord::setDb(new PDO('sqlite:BattleShip.db'));
+require '../vendor/autoload.php';
+ActiveRecord::setDb(new PDO('sqlite:../database/BattleShip.db'));
 
 class GameStorage extends ActiveRecord{
     public $table = 'GameStorage';
@@ -26,19 +26,19 @@ class GameStorage extends ActiveRecord{
             }
         }
         if($foundId){
-            header('Location: game.php/'.$id);
+            header('Location: ../templates/gameView.php/?playerid='.$id);
         }
         else{
             session_start();
             $_SESSION["idError"]="The ID you have entered doesn't correspond to a running game.";
-            header('Location: index.php');
+            header('Location: ../index.php');
             session_destroy();
         }
     }
     else{
         session_start();
         $_SESSION["idError"]="Please enter an ID to search for a game.";
-        header('Location: index.php');
+        header('Location: ../index.php');
         //session_destroy();
     }
 ?>

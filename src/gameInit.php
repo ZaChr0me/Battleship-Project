@@ -1,6 +1,6 @@
 <?php
-    require __DIR__ . '/vendor/autoload.php';
-    ActiveRecord::setDb(new PDO('sqlite:BattleShip.db'));
+    require '../vendor/autoload.php';
+    ActiveRecord::setDb(new PDO('sqlite:../database/BattleShip.db'));
     
     class GameStorage extends ActiveRecord{
       public $table = 'GameStorage';
@@ -10,7 +10,6 @@
     //This generates 2 unique IDs for players to join their respective game page.
     //While the following may seem overkill, since random_bytes() has a low chance of duplicate, the chance still exist
     //thus, the loop is expected to run no more than twice or thrice even with high numbers of recorded games
-    
     $GameStorageQuery=new GameStorage();
     $Game=$GameStorageQuery->findAll();
     
@@ -42,13 +41,18 @@
     //Creating the game itself
     
     ActiveRecord::execute("CREATE TABLE IF NOT EXISTS Game_$GameID (
-                              StorageID INTEGER,
-                              Value1 TEXT,
-                              Value2 TEXT,
-                              Value3 TEXT
+                              storageID INTEGER,
+                              playerABoard TEXT,
+                              playerBBoard TEXT,
+                              playerAView TEXT,
+                              playerBView TEXT,
+                              playerTurn INTEGER
                           )");
-    //StorageID REFERENCE [0:Field Templates],[1:Player Action],[2:Game End State]
-    //Value 1 to 3 represent different values to be populated depending on the StorageID
+    //storageID REFERENCE [0:Field Templates],[1:Player Action],[2:Game End State]
+    //playerABoard and playerBBoard are the players board
+    //playerAView and playerBView are the vision of the board of their opponents by the player
+    //playerTurn is the id of the player whose turn it is.
+    //
     
     //Loading the Game Templates
     /*Game Templates Properties : 
@@ -72,8 +76,12 @@
     echo count($templates["Templates"])." ".$templates["Templates"][1]["id"]."</br>";
     echo print_r($templates["Templates"][1]["tiles"]);
     */
-    $Player1Template=random_int(1,count($templates["Templates"]));
-    $Player2Template=random_int(1,count($templates["Templates"]));
-    ActiveRecord::execute("INSERT INTO Game_$GameID VALUES(0,$Player1Template,$Player2Template,\"\");");
-    header('Location: game.php/' . $Player1ID);
+    $Player1Template=json_encode($templates['Templates'][random_int(1,count($templates["Templates"])-1)]['tiles']);
+    echo $Player1Template;
+    $Player2Template=json_encode($templates['Templates'][random_int(1,count($templates["Templates"])-1)]['tiles']);
+    $Player1View=json_encode(array([0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]));
+    $Player2View=json_encode(array([0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]));
+    echo "INSERT INTO Game_$GameID VALUES(0,$Player1Template,$Player2Template,\"\");";
+    ActiveRecord::execute("INSERT INTO Game_$GameID VALUES(0,\"$Player1Template\",\"$Player2Template\",\"$Player1View\",\"$Player2View\",0);");
+    header('Location: ../templates/gameView.php/?playerid=' . $Player1ID);
 ?>
