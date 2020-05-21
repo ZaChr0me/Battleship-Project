@@ -1,7 +1,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="http://fastly.ink.sapo.pt/3.1.10/css/ink.css">
-<link href="styles/style.css" rel="stylesheet" type="text/css">
+<link href="./styles/style.css" rel="stylesheet" type="text/css">
 <title>Battleship Game</title>
 </head>
 <body>
