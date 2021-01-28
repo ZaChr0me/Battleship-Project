@@ -83,8 +83,8 @@ function update(){
     }
 }
 
-$testArrayAlpha=array('a','b','c','d','e','f','g','h','A','B','C','D','E','F','G','H');
-$testArrayNum=array(1,2,3,4,5,6,7,8);
+$testArrayAlpha=['a','b','c','d','e','f','g','h','A','B','C','D','E','F','G','H'];
+$testArrayNum=[1,2,3,4,5,6,7,8];
 $(document).ready(function(){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);

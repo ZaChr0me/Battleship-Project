@@ -25,7 +25,7 @@ class GameState extends ActiveRecord{
     }
 }
 
-$app = new \Slim\App();
+$app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
 //$twig = new \Twig\Environment($loader, ['debug' => true]);
 $container = $app->getContainer();
 $container['view'] = function ($container) {
@@ -80,7 +80,7 @@ $app->get(
             echo "</br>"; 
         }
         */
-        return json_encode($Attributes);
+        return $response->withJson($Attributes);
     }
 );
 
@@ -93,18 +93,18 @@ $app->get('/board/{gameID}/{playerType}/{level}/{board}',
         $Game=$GameState->find($args['level']);
         if($args['playerType']=='A'){
             if($args['board']=='A'){
-                return json_encode($Game->data['playerABoard']);
+                return $response->withJson(json_decode($Game->data['playerABoard']));
             }
             else{
-                return json_encode($Game->data['playerAView']);
+                return $response->withJson(json_decode($Game->data['playerAView']));
             }
         }
         else{
             if($args['board']=='B'){
-                return json_encode($Game->data['playerBBoard']);
+                return $response->withJson(json_decode($Game->data['playerBBoard']));
             }
             else{
-                return json_encode($Game->data['playerBView']);
+                return $response->withJson(json_decode($Game->data['playerBView']));
             }
         }
     });
@@ -213,4 +213,3 @@ $app->get('/update/{gameID}',function($request, $response, array $args){
 });
 
 $app->run();
-?>
