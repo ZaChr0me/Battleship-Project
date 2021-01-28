@@ -1,2 +1,2 @@
 # Battleship-Project
-Web Development project
+Web Development project for school
